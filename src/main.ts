@@ -35,6 +35,7 @@ import { bloom } from 'three/examples/jsm/tsl/display/BloomNode.js';
 
 // ── Standard addons ───────────────────────────────────────────────────────────
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import { FlakesTexture } from 'three/examples/jsm/textures/FlakesTexture.js';
@@ -200,7 +201,10 @@ mount.appendChild(hotspotsContainer);
 const loadingOverlay = createLoadingOverlay();
 mount.appendChild(loadingOverlay);
 
+const dracoLoader = new DRACOLoader();
+dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
 const gltfLoader = new GLTFLoader();
+gltfLoader.setDRACOLoader(dracoLoader);
 
 gltfLoader.load('./Models/environment.glb', (gltf) => {
   const model = gltf.scene;
@@ -276,16 +280,16 @@ gltfLoader.load(
 
       // Animation 0: Convertible Roof (Mixer 1)
       roofMixer = new THREE.AnimationMixer(model);
-      const rawRoofClip = gltf.animations[3];
+      const rawRoofClip = gltf.animations[0];
       const roofClip = filterClipTracks(rawRoofClip, ['cabo', 'top']);
       roofAction = roofMixer.clipAction(roofClip);
       roofAction.loop = THREE.LoopOnce;
       roofAction.clampWhenFinished = true;
 
       // Animation 1: Left Door (Mixer 2)
-      if (gltf.animations.length > 4) {
+      if (gltf.animations.length > 1) {
         leftDoorMixer = new THREE.AnimationMixer(model);
-        const rawLeftDoorClip = gltf.animations[4];
+        const rawLeftDoorClip = gltf.animations[1];
         const leftDoorClip = filterClipTracks(rawLeftDoorClip, ['door_l', 'doorfont_glass_l']);
         leftDoorAction = leftDoorMixer.clipAction(leftDoorClip);
         leftDoorAction.loop = THREE.LoopOnce;
@@ -293,9 +297,9 @@ gltfLoader.load(
       }
 
       // Animation 2: Right Door (Mixer 3)
-      if (gltf.animations.length > 5) {
+      if (gltf.animations.length > 2) {
         rightDoorMixer = new THREE.AnimationMixer(model);
-        const rawRightDoorClip = gltf.animations[5];
+        const rawRightDoorClip = gltf.animations[2];
         const rightDoorClip = filterClipTracks(rawRightDoorClip, ['door_r', 'doorfont_glass_r']);
         rightDoorAction = rightDoorMixer.clipAction(rightDoorClip);
         rightDoorAction.loop = THREE.LoopOnce;
