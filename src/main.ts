@@ -149,7 +149,7 @@ scene.add(keyLight);
 // HDRI environment (with graceful fallback)
 const rgbeLoader = new RGBELoader();
 rgbeLoader.load(
-  '/Textures/newman_locker_room_1k.hdr',
+  './Textures/newman_locker_room_1k.hdr',
   (hdrTexture) => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const pmrem = new THREE.PMREMGenerator(renderer as any);
@@ -202,7 +202,7 @@ mount.appendChild(loadingOverlay);
 
 const gltfLoader = new GLTFLoader();
 
-gltfLoader.load('/Models/environment.glb', (gltf) => {
+gltfLoader.load('./Models/environment.glb', (gltf) => {
   const model = gltf.scene;
   model.traverse((child) => {
     console.log(child.name);
@@ -235,7 +235,7 @@ let carPaintrmaterial = new THREE.MeshPhysicalMaterial({
 });
 
 gltfLoader.load(
-  '/Models/VinfastVFXCar.glb',
+  './Models/VinfastVFXCar.glb',
   (gltf) => {
     const model = gltf.scene;
     console.log('car', gltf);
