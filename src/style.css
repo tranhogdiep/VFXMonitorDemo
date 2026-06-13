@@ -1,0 +1,1270 @@
+/* ═══════════════════════════════════════════════════════════
+   VinFast VFX Monitor Dashboard – style.css
+   Design System: Dark Premium Automotive UI
+   Color Palette:
+     --copper:       #D48F38
+     --copper-dim:   rgba(212, 143, 56, 0.4)
+     --copper-glow:  rgba(212, 143, 56, 0.15)
+     --bg-deep:      #0A0A0C
+     --glass-bg:     rgba(18, 18, 20, 0.55)
+     --text-bright:  #FFFFFF
+     --text-dim:     rgba(255,255,255,0.55)
+     --green-neon:   #3DFF8F
+═══════════════════════════════════════════════════════════ */
+
+/* ─── RESET & BASE ─── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --copper: #D48F38;
+  --copper-mid: #B8741E;
+  --copper-dim: rgba(212, 143, 56, 0.4);
+  --copper-glow: rgba(212, 143, 56, 0.15);
+  --copper-ultra: rgba(212, 143, 56, 0.08);
+  --bg-deep: #0A0A0C;
+  --glass-bg: rgba(18, 18, 20, 0.55);
+  --glass-bg-dark: rgba(10, 10, 14, 0.72);
+  --text-bright: #FFFFFF;
+  --text-dim: rgba(255, 255, 255, 0.55);
+  --text-muted: rgba(255, 255, 255, 0.25);
+  --green-neon: #3DFF8F;
+  --green-dim: rgba(61, 255, 143, 0.4);
+  --border-glass: 1px solid rgba(212, 143, 56, 0.4);
+  --blur-std: blur(12px);
+  --radius-card: 12px;
+  --radius-btn: 10px;
+  --font-hud: 'Orbitron', monospace;
+  --font-body: 'Inter', sans-serif;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+  font-family: var(--font-body);
+  color: var(--text-bright);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ─── REUSABLE COMPONENT CLASSES ─── */
+
+/* .panel-glass – Frosted glass card/button surface */
+.panel-glass {
+  background:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(0, 0, 0, 0.15) 100%);
+  backdrop-filter: var(--blur-std);
+  -webkit-backdrop-filter: var(--blur-std);
+  border: 2px solid rgba(255, 215, 170, 0.45);
+
+  border-radius: var(--radius-card);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0 15px rgba(255, 210, 160, 0.12);
+  transition: all .25s ease;
+}
+
+/* Inner Glow Layer 1 */
+.panel-glass::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.5),
+    inset 0 0 8px rgba(255, 220, 180, 0.25),
+    inset 0 0 18px rgba(255, 220, 180, 0.12);
+  z-index: 1;
+}
+
+/* Inner Glow Layer 2 */
+.panel-glass::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 40px rgba(255, 220, 180, 0.05),
+    inset 0 0 80px rgba(255, 220, 180, 0.03);
+  z-index: 1;
+}
+
+.panel-glass:hover {
+  border-color: rgba(255, 220, 180, 0.75);
+  box-shadow: 0 0 20px rgba(255, 220, 180, 0.25);
+}
+
+.panel-glass:active {
+  transform: scale(0.98);
+}
+
+/* .text-telemetry-number – Large HUD numeric readout */
+.text-telemetry-number {
+  font-family: var(--font-hud);
+  font-size: clamp(2rem, 3.2vw, 4rem);
+  font-weight: 700;
+  color: var(--text-bright);
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+}
+
+/* .text-ui-label – Copper accent label */
+.text-ui-label {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--copper);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* .neon-glow-copper – Copper neon glow */
+.neon-glow-copper {
+  color: var(--copper);
+  text-shadow: 0 0 8px var(--copper), 0 0 20px rgba(212, 143, 56, 0.6), 0 0 40px rgba(212, 143, 56, 0.3);
+  border-color: var(--copper-dim) !important;
+  box-shadow: 0 0 10px rgba(212, 143, 56, 0.4), inset 0 0 10px rgba(212, 143, 56, 0.1);
+}
+
+/* .neon-glow-green – Green neon glow */
+.neon-glow-green {
+  color: var(--green-neon);
+  text-shadow: 0 0 8px var(--green-neon), 0 0 20px rgba(61, 255, 143, 0.5), 0 0 40px rgba(61, 255, 143, 0.2);
+}
+
+/* ─── APP ROOT & DASHBOARD SHELL ─── */
+#app-root {
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #000;
+  overflow: hidden;
+}
+
+#dashboard {
+  position: relative;
+  width: 1574px;
+  height: 885.38px;
+  flex-shrink: 0;
+  background: var(--bg-deep);
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: 0 0 80px rgba(66, 66, 66, 0.9), 0 0 2px rgba(207, 194, 75, 0.2);
+  /* Font-size anchor scaled to fixed width so em units remain consistent */
+  font-size: clamp(10px, calc(1574px * 0.01045), 16px);
+  border: 6px solid rgba(145, 145, 145, 0.45);
+}
+
+/* BG image */
+#bg-layer {
+  position: absolute;
+  inset: 0;
+  background-image: url('/UIs/Background.png');
+  background-size: 100% 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 1;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Radial overlay to deepen edges */
+#bg-layer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse at center, transparent 35%, rgba(0, 0, 0, 0.55) 100%);
+}
+
+/* ─── HEADER BAR ─── */
+#header-bar {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 8%;
+  padding: 0 1%;
+  background: transparent;
+  border-bottom: none;
+  top: 8px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 7em;
+  padding-left: 10.5em;
+  position: relative;
+  top: 20px;
+}
+
+.header-stat {
+  display: flex;
+  align-items: center;
+  gap: 0.4em;
+  font-family: var(--font-body);
+  font-size: 1.7em;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.04em;
+}
+
+.header-time {
+  font-family: var(--font-hud);
+  font-size: 1.7em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.icon-sm {
+  width: 0.9em;
+  height: 0.9em;
+  opacity: 0.7;
+}
+
+.header-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gear-display-main {
+  font-family: var(--font-hud);
+  font-size: 5em;
+  font-weight: 900;
+  color: rgba(255, 255, 255, 0.95);
+  letter-spacing: -0.02em;
+  text-shadow: 0 0 20px rgba(255, 255, 255, 0.4);
+  /* Centers in the notch depression of the background */
+  position: relative;
+  padding: 0 0.4em;
+  margin-top: 0.1em;
+  top: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.gear-logo-img {
+  height: 1em;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 15px rgba(255, 255, 255, 0.4));
+  transition: filter 0.3s ease;
+}
+
+/* .gear-display-main::before,
+.gear-display-main::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  width: 3em;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(212,143,56,0.5));
+  transform: translateY(-50%);
+}
+.gear-display-main::before { right: 100%; }
+.gear-display-main::after {
+  left: 100%;
+  background: linear-gradient(90deg, rgba(212,143,56,0.5), transparent);
+} */
+
+.header-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1.5em;
+  position: relative;
+  top: 20px;
+  right: 50px;
+}
+
+.status-ready {
+  font-family: var(--font-hud);
+  font-size: 1.5em;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  padding: 0.25em 0.7em;
+  border: 1px solid var(--green-dim);
+  border-radius: 4px;
+  background: rgba(61, 255, 143, 0.06);
+}
+
+.gear-selector {
+  display: flex;
+  align-items: center;
+  gap: 2em;
+  font-family: var(--font-hud);
+  font-size: 1.5em;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.08em;
+}
+
+.gear-item {
+  transition: color 0.3s;
+}
+
+.gear-item.gear-active {
+  font-size: 1.05em;
+  font-weight: 700;
+  padding: 0.15em 0.5em;
+  border-radius: 4px;
+  background: rgba(212, 143, 56, 0.1);
+}
+
+/* ─── MAIN CONTENT GRID ─── */
+#main-content {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  /* sidebar | left-cards | center | right-cards */
+  grid-template-columns: 9% 19% 1fr 25%;
+  height: 86%;
+  gap: 0;
+  pointer-events: none;
+}
+
+#main-content> :not(#center-section) {
+  pointer-events: auto;
+}
+
+/* ─── LEFT SIDEBAR ─── */
+/* Matches the wide glass panel on the left side of the background */
+#left-sidebar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  padding: 0.6em 0;
+  /* No explicit border – the background glass panel provides the visual frame */
+  /* border-right: 1px solid rgba(212, 143, 56, 0.18); */
+  background: transparent;
+  top: -40px;
+  position: relative;
+  bottom: 150px;
+}
+
+.sidebar-icon {
+  width: 5em;
+  height: 5em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  color: rgba(255, 255, 255, 0.8);
+  transition: all 0.25s ease;
+  flex-shrink: 0;
+
+}
+
+.sidebar-icon svg {
+  width: 1.5em;
+  height: 1.5em;
+  color: rgb(214, 214, 214);
+}
+
+.sidebar-icon:hover svg {
+  width: 1.5em;
+  height: 1.5em;
+  color: rgb(236, 182, 31);
+}
+
+.sidebar-icon:hover {
+  color: var(--copper);
+  border-color: rgba(241, 222, 42, 0.3);
+  background: rgba(212, 143, 56, 0.08);
+}
+
+.sidebar-icon--active {
+  color: rgb(255, 187, 0);
+  border-color: rgba(243, 240, 37, 0.35);
+  background: rgba(231, 203, 45, 0.1);
+}
+
+.sidebar-icon--active svg {
+  color: rgb(255, 187, 0);
+}
+
+.sidebar-label {
+  font-family: var(--font-hud);
+  font-size: 0.85em;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+}
+
+.sidebar-divider {
+  width: 60%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(212, 143, 56, 0.25), transparent);
+  margin: 0.2em 0;
+  flex-shrink: 0;
+}
+
+/* ─── LEFT COLUMN – CARDS ─── */
+#left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5em;
+  padding: 0.5em 0.5em 0.5em 0.5em;
+  /* border-right: 1px solid rgba(212, 143, 56, 0.08); */
+  position: relative;
+  top: 100px;
+  left: 30px;
+  bottom: 500px;
+  width: 250px;
+  height: 550px;
+}
+
+/* Cards take equal space */
+#left-column .panel-glass {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 0.65em 0.85em;
+}
+
+.card-top-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.card-label-row {
+  margin-bottom: 0.2em;
+}
+
+.label-small {
+  font-size: 1em;
+  color: rgba(212, 143, 56, 0.8);
+}
+
+.card-value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.3em;
+  margin: 0.2em 0;
+}
+
+.unit-small {
+  font-size: 1em;
+  opacity: 0.8;
+}
+
+/* Battery graphic */
+.battery-icon {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.battery-body {
+  display: flex;
+  gap: 3px;
+  padding: 3px;
+  border: 1.5px solid var(--copper);
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.3);
+  height: 1.6em;
+  align-items: center;
+}
+
+.battery-bar {
+  width: 0.35em;
+  height: 70%;
+  border-radius: 2px;
+  background: var(--copper);
+  box-shadow: 0 0 6px rgba(212, 143, 56, 0.6);
+}
+
+.battery-bar.bar-1 {
+  opacity: 0.3;
+}
+
+.battery-bar.bar-2 {
+  opacity: 0.6;
+}
+
+.battery-bar.bar-3 {
+  opacity: 0.85;
+}
+
+.battery-bar.bar-4 {
+  opacity: 1;
+}
+
+.battery-tip {
+  width: 3px;
+  height: 0.6em;
+  background: var(--copper);
+  border-radius: 0 2px 2px 0;
+  opacity: 0.7;
+}
+
+/* Range timeline */
+.range-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35em;
+  margin-top: 0.3em;
+}
+
+.range-track {
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.range-fill {
+  width: 72%;
+  height: 100%;
+  background: linear-gradient(90deg, var(--copper-mid), var(--copper));
+  border-radius: 2px;
+  box-shadow: 0 0 8px rgba(212, 143, 56, 0.5);
+}
+
+.range-car-icon {
+  width: 3.5em;
+  opacity: 0.9;
+  filter: drop-shadow(0 0 4px rgba(212, 143, 56, 0.5));
+}
+
+.range-car-icon svg {
+  width: 100%;
+  height: auto;
+}
+
+.range-dots {
+  display: flex;
+  gap: 0.35em;
+  align-items: center;
+}
+
+.range-dot {
+  width: 0.4em;
+  height: 0.4em;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(212, 143, 56, 0.3);
+}
+
+.range-dot.active-dot {
+  background: var(--copper);
+  box-shadow: 0 0 6px var(--copper);
+}
+
+/* Sun & Time Dial Controller */
+.dial-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1;
+  min-height: 0;
+  padding: 0.25em;
+  position: relative;
+}
+
+#time-dial-svg {
+  width: 100%;
+  height: 100%;
+  max-height: 155px;
+  max-width: 155px;
+  overflow: visible;
+}
+
+.dial-track {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.06);
+  stroke-dasharray: 2 3;
+  stroke-width: 1.5;
+}
+
+.dial-tick {
+  stroke: rgba(255, 255, 255, 0.2);
+  stroke-width: 1;
+}
+
+.dial-tick.major {
+  stroke: var(--copper-mid);
+  stroke-width: 1.5;
+}
+
+.dial-label {
+  font-family: var(--font-hud);
+  font-size: 7px;
+  font-weight: 500;
+  fill: rgba(255, 255, 255, 0.45);
+  text-anchor: middle;
+  dominant-baseline: middle;
+  letter-spacing: 0.05em;
+}
+
+.dial-label.active {
+  fill: var(--copper);
+  text-shadow: 0 0 4px rgba(212, 143, 56, 0.6);
+}
+
+.dial-sun-body {
+  fill: none;
+  stroke: var(--copper);
+  stroke-width: 2;
+  transition: all 0.5s ease;
+  filter: drop-shadow(0 0 4px var(--copper));
+}
+
+@keyframes rotateRays {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.dial-sun-rays {
+  transform-origin: 80px 80px;
+  animation: rotateRays 45s linear infinite;
+}
+
+.dial-sun-rays line {
+  stroke: var(--copper);
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  transition: all 0.5s ease;
+}
+
+#dial-moon-icon {
+  fill: none;
+  stroke: #7ba4ff;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  transition: all 0.5s ease;
+  filter: drop-shadow(0 0 6px rgba(123, 164, 255, 0.6));
+}
+
+.dial-knob-glow {
+  fill: var(--copper);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  filter: blur(4px);
+}
+
+#dial-handle:hover .dial-knob-glow,
+.dragging-dial .dial-knob-glow {
+  opacity: 0.4;
+}
+
+.dial-knob {
+  fill: #111113;
+  stroke: var(--copper-mid);
+  stroke-width: 2;
+  transition: stroke 0.2s ease, fill 0.2s ease;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+}
+
+#dial-handle:hover .dial-knob,
+.dragging-dial .dial-knob {
+  stroke: var(--copper);
+  fill: #19191d;
+}
+
+.dial-knob-center {
+  fill: var(--copper);
+  transition: transform 0.2s ease, fill 0.2s ease;
+}
+
+#dial-handle:hover .dial-knob-center,
+.dragging-dial .dial-knob-center {
+  transform: scale(1.2);
+  transform-origin: 80px 18px;
+}
+
+/* ─── CENTER SECTION ─── */
+#center-section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  overflow: visible;
+  padding-top: 0;
+  pointer-events: none;
+}
+
+/* Speedometer SVG – anchored to top of center, slightly overlapping header notch area */
+#speedometer-container {
+  position: absolute;
+  top: -6%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  z-index: 20;
+  pointer-events: none;
+}
+
+#speedo-svg {
+  width: 100%;
+  height: auto;
+  filter: drop-shadow(0 0 15px rgba(212, 143, 56, 0.25));
+}
+
+/* Digital speed overlay – sits inside the speedometer arc */
+#speed-readout {
+  position: absolute;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 25;
+  pointer-events: none;
+}
+
+#speed-value {
+  font-size: clamp(2.5rem, 4vw, 5.5rem);
+  font-weight: 900;
+  display: block;
+  line-height: 1;
+  text-shadow: 0 0 40px rgba(255, 255, 255, 0.5), 0 0 80px rgba(255, 255, 255, 0.2);
+}
+
+#speed-unit {
+  font-size: clamp(0.6rem, 0.9vw, 1rem);
+  margin-top: 0.2em;
+  display: block;
+  letter-spacing: 0.12em;
+}
+
+/* 3D Mount – occupies lower ~75% of center section */
+#threejs-mount {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+
+#threejs-mount canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Ground glow under car */
+#ground-glow {
+  position: absolute;
+  bottom: 2%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 70%;
+  height: 15%;
+  background: radial-gradient(ellipse at center, rgba(212, 143, 56, 0.18) 0%, transparent 70%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* ─── RIGHT COLUMN ─── */
+#right-column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3em;
+  padding: 0.5em 0.6em 0.5em 0.5em;
+  border-left: 0px solid rgba(212, 143, 56, 0.08);
+  position: relative;
+  top: 100px;
+  right: -10px;
+  bottom: 500px;
+  width: 250px;
+  height: 550px;
+}
+
+/* ─── DOOR / ROOF BUTTONS (.car-btn style) ─── */
+.door-btn {
+  position: relative;
+
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.2em;
+  padding: 0 1.6em;
+  border: 2px solid rgba(255, 215, 170, 0.45);
+  border-radius: 1.6em;
+  background:
+    linear-gradient(180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.03) 50%,
+      rgba(0, 0, 0, 0.15) 100%);
+  backdrop-filter: var(--blur-std);
+  -webkit-backdrop-filter: var(--blur-std);
+  color: white;
+  cursor: pointer;
+  overflow: hidden;
+
+  max-height: 23%;
+  min-height: 0;
+
+  box-shadow:
+    0 0 15px rgba(255, 210, 160, 0.12);
+
+  transition: all .25s ease;
+}
+
+/* Inner Glow Layer 1 */
+.door-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+
+  box-shadow:
+    inset 0 1px 1px rgba(255, 255, 255, 0.5),
+    inset 0 0 8px rgba(255, 220, 180, 0.25),
+    inset 0 0 18px rgba(255, 220, 180, 0.12);
+
+  z-index: 1;
+}
+
+/* Inner Glow Layer 2 */
+.door-btn::after {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  pointer-events: none;
+
+  box-shadow:
+    inset 0 0 40px rgba(255, 220, 180, 0.05),
+    inset 0 0 80px rgba(255, 220, 180, 0.03);
+
+  z-index: 1;
+}
+
+.door-btn:hover {
+  border-color: rgba(255, 220, 180, 0.75);
+  box-shadow:
+    0 0 20px rgba(255, 220, 180, 0.25);
+}
+
+.door-btn:active {
+  transform: scale(0.98);
+}
+
+/* Icon wrapper */
+.btn-icon-wrap {
+  width: 3.2em;
+  height: 3.2em;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.btn-icon-wrap svg,
+.door-icon {
+  width: 100%;
+  height: 100%;
+}
+
+/* Copper stroke on all paths inside the icon */
+.btn-icon-wrap path,
+.btn-icon-wrap circle {
+  stroke: #f8c892;
+  stroke-width: 1.8;
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 6px rgba(248, 200, 146, 0.3));
+}
+
+.door-btn:hover .btn-icon-wrap {
+  filter: drop-shadow(0 0 8px rgba(248, 200, 146, 0.5));
+}
+
+/* Label */
+.btn-label {
+  font-family: var(--font-body);
+  font-size: 1.5em;
+  font-weight: 300;
+  color: #f4f4f4;
+  letter-spacing: 0.01em;
+  text-transform: none;
+  text-shadow: 0 0 4px rgba(255, 255, 255, 0.15);
+  z-index: 2;
+}
+
+/* Bottom 2 square buttons */
+#right-bottom-btns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.5em;
+  flex: 1.4;
+}
+
+.sq-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5em;
+  cursor: pointer;
+  border-radius: var(--radius-card);
+  padding: 0.6em;
+  transition: all 0.25s ease;
+  background: var(--glass-bg-dark);
+  border: 1px solid rgba(212, 143, 56, 0.35);
+}
+
+.sq-btn--active {
+  background: rgba(212, 143, 56, 0.15);
+  border-color: rgba(212, 143, 56, 0.6);
+  box-shadow: 0 0 25px rgba(212, 143, 56, 0.25);
+}
+
+.sq-btn:hover {
+  background: rgba(212, 143, 56, 0.18);
+  border-color: rgba(212, 143, 56, 0.75);
+  box-shadow: 0 0 25px rgba(212, 143, 56, 0.3);
+}
+
+.sq-btn-icon {
+  width: 2em;
+  height: 2em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 0 5px rgba(212, 143, 56, 0.4));
+}
+
+.sq-btn-icon svg {
+  width: 100%;
+  height: 100%;
+}
+
+.sq-btn-label {
+  font-size: 0.72em;
+  font-weight: 500;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  color: rgba(212, 143, 56, 0.85);
+}
+
+/* ─── FOOTER BAR ─── */
+/* Matches the bottom platform shape on the background */
+#footer-bar {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  height: 0%;
+  padding: 0% 30%;
+  background: transparent;
+  border-top: none;
+  transform: translateY(-2.9em);
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 1.5em;
+}
+
+.footer-icon-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.1em;
+}
+
+.footer-icon {
+  width: 2.0em;
+  height: 2.0em;
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.footer-icon-label {
+  font-family: var(--font-hud);
+  font-size: 0.45em;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.1em;
+}
+
+.footer-center {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.leaf-icon {
+  width: 2.0em;
+  height: 2.0em;
+}
+
+.footer-mode {
+  font-family: var(--font-hud);
+  font-size: 1.2em;
+  font-weight: 600;
+  color: var(--copper);
+  letter-spacing: 0.18em;
+  text-shadow: 0 0 10px rgba(212, 143, 56, 0.5);
+}
+
+.footer-right {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6em;
+}
+
+.footer-odo {
+  font-family: var(--font-hud);
+  font-size: 1.2em;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: 0.08em;
+}
+
+/* ─── ANIMATIONS ─── */
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes speedoArcDraw {
+  from {
+    stroke-dashoffset: 581;
+  }
+
+  to {
+    stroke-dashoffset: 393;
+  }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(15px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scanLine {
+  from {
+    top: 0;
+  }
+
+  to {
+    top: 100%;
+  }
+}
+
+/* Status ready pulse */
+.status-ready {
+  animation: pulseGlow 2.5s ease-in-out infinite;
+}
+
+/* Speedometer arc entrance */
+#speedo-progress {
+  animation: speedoArcDraw 1.8s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+}
+
+/* Cards entrance */
+.panel-glass {
+  animation: fadeInUp 0.6s ease both;
+}
+
+#card-soc {
+  animation-delay: 0.1s;
+}
+
+#card-range {
+  animation-delay: 0.2s;
+}
+
+#card-time-control {
+  animation-delay: 0.3s;
+}
+
+.door-btn {
+  animation: fadeInUp 0.6s ease both;
+}
+
+#btn-door-left {
+  animation-delay: 0.15s;
+}
+
+#btn-door-right {
+  animation-delay: 0.25s;
+}
+
+#btn-roof {
+  animation-delay: 0.35s;
+}
+
+#btn-map {
+  animation-delay: 0.4s;
+}
+
+#btn-charger {
+  animation-delay: 0.45s;
+}
+
+/* Subtle border shimmer on active element */
+@keyframes borderShimmer {
+  0% {
+    border-color: rgba(212, 143, 56, 0.35);
+  }
+
+  50% {
+    border-color: rgba(212, 143, 56, 0.7);
+  }
+
+  100% {
+    border-color: rgba(212, 143, 56, 0.35);
+  }
+}
+
+.sq-btn--active {
+  animation: borderShimmer 3s ease-in-out infinite;
+}
+
+/* ─── RESPONSIVE SCALING ─── */
+/* The dashboard uses aspect-ratio: 16/9 and scales horizontally.
+   All internal sizes use em/% so they auto-scale with font-size on #dashboard */
+@media (max-width: 900px) {
+  #dashboard {
+    border-radius: 12px;
+  }
+}
+
+@media (max-width: 600px) {
+  #dashboard {
+    border-radius: 8px;
+  }
+}
+
+/* ─── HOTSPOT SYSTEM STYLING ─── */
+#hotspots-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 50;
+  overflow: hidden;
+}
+
+.hotspot {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 32px;
+  cursor: pointer;
+  z-index: 60;
+  pointer-events: auto;
+  transition: opacity 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hotspot-dot {
+  width: 10px;
+  height: 10px;
+  background-color: #00f3ff;
+  border-radius: 50%;
+  box-shadow: 0 0 10px #00f3ff, 0 0 20px rgba(0, 243, 255, 0.6);
+  transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.hotspot-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid rgba(0, 243, 255, 0.7);
+  border-radius: 50%;
+  animation: hotspot-pulse 2s infinite ease-out;
+  pointer-events: none;
+}
+
+.hotspot-label {
+  position: absolute;
+  left: 40px;
+  background: rgba(10, 10, 14, 0.9);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(0, 243, 255, 0.4);
+  color: var(--text-bright);
+  padding: 5px 12px;
+  border-radius: 6px;
+  font-family: var(--font-hud);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateX(-12px);
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+}
+
+.hotspot:hover .hotspot-label {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.hotspot:hover .hotspot-dot {
+  transform: scale(1.5);
+  background-color: #ffffff;
+  box-shadow: 0 0 15px #ffffff, 0 0 30px #00f3ff;
+}
+
+.hotspot.hidden {
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%) scale(0.6);
+}
+
+@keyframes hotspot-pulse {
+  0% {
+    transform: scale(0.35);
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(1.6);
+    opacity: 0;
+  }
+}

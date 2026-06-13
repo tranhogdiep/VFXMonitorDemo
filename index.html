@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="VinFast VFX – Next-generation electric vehicle dashboard with real-time monitoring interface." />
+  <title>VinFast VFX – Monitor Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="/logo_Vinfast.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+  <div id="app-root">
+
+    <!-- ═══════════════════════════════════════════════════
+         OUTER DASHBOARD WRAPPER (16:9 Aspect Ratio)
+    ═══════════════════════════════════════════════════ -->
+    <div id="dashboard">
+          <div id="threejs-mount"></div>
+
+      <!-- BG image layer -->
+      <div id="bg-layer"></div>
+
+      <!-- ───────────────── HEADER BAR ───────────────── -->
+      <header id="header-bar">
+        <div class="header-left">
+          <span class="header-stat">
+            <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 4 10 14.5 14.5 0 0 0-4 10 14.5 14.5 0 0 0-4-10 14.5 14.5 0 0 0 4-10z"/><path d="M2 12h20"/></svg>
+            25°C
+          </span>
+          <span class="header-stat header-time">10:30 AM</span>
+        </div>
+
+        <div class="header-center">
+          <div class="gear-display-main">
+            <img src="/UIs/logo_Vinfast.png" alt="VinFast" class="gear-logo-img">
+          </div>
+        </div>
+
+        <div class="header-right">
+          <!-- <span class="status-ready neon-glow-green">READY</span> -->
+          <div class="gear-selector">
+            <span class="gear-item">P</span>
+            <span class="gear-item">R</span>
+            <span class="gear-item">N</span>
+            <span class="gear-item gear-active neon-glow-copper">D</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- ───────────────── MAIN CONTENT GRID ───────────────── -->
+      <main id="main-content">
+
+        <!-- LEFT SIDEBAR ICONS -->
+        <aside id="left-sidebar">
+          <button class="sidebar-icon" id="nav-direction" title="Navigation">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polygon points="3,11 22,2 13,21 11,13 3,11"/></svg>
+          </button>
+          <button class="sidebar-icon" id="nav-music" title="Music">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/></svg>
+          </button>
+          <div class="sidebar-divider"></div>
+          <button class="sidebar-icon" id="nav-fan" title="Climate">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+          </button>
+          <button class="sidebar-icon" id="nav-ec" title="E/C Mode">
+            <span class="sidebar-label">E/C</span>
+          </button>
+          <button class="sidebar-icon" id="nav-seat" title="Seats">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M20.38 3.46L16 2l-5 5.5-3-3-4 4"/><path d="M7.5 15.5l-5 5"/><path d="M7.5 15.5l4-4"/><path d="M11.5 11.5l7-7"/></svg>
+          </button>
+          <div class="sidebar-divider"></div>
+          <button class="sidebar-icon" id="nav-settings" title="Settings">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M5.34 17.66l-1.41 1.41M19.07 19.07l-1.41-1.41M5.34 6.34L3.93 4.93M21 12h-2M5 12H3M12 21v-2M12 5V3"/></svg>
+          </button>
+          <button class="sidebar-icon" id="nav-apps" title="Apps">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+          </button>
+          <button class="sidebar-icon sidebar-icon--active" id="nav-home" title="Home">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 9.5L12 3l9 6.5V20a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5z"/><path d="M9 21V12h6v9"/></svg>
+          </button>
+        </aside>
+
+        <!-- LEFT COLUMN – INFO CARDS -->
+        <section id="left-column">
+
+          <!-- Card 1: SoC / Battery -->
+          <div class="panel-glass card-soc" id="card-soc">
+            <div class="card-top-row">
+              <span class="text-ui-label">SoC</span>
+              <div class="battery-icon" id="battery-graphic">
+                <div class="battery-body">
+                  <div class="battery-bar bar-4"></div>
+                  <div class="battery-bar bar-3"></div>
+                  <div class="battery-bar bar-2"></div>
+                  <div class="battery-bar bar-1"></div>
+                </div>
+                <div class="battery-tip"></div>
+              </div>
+            </div>
+            <div class="card-value-row">
+              <span class="text-telemetry-number">82</span>
+              <span class="text-ui-label unit-small">%</span>
+            </div>
+          </div>
+
+          <!-- Card 2: Range -->
+          <div class="panel-glass card-range" id="card-range">
+            <div class="card-label-row">
+              <span class="text-ui-label label-small">Remaining Range</span>
+            </div>
+            <div class="card-value-row">
+              <span class="text-telemetry-number">486</span>
+              <span class="text-ui-label unit-small">km</span>
+            </div>
+            <div class="range-timeline" id="range-timeline">
+              <div class="range-track">
+                <div class="range-fill"></div>
+              </div>
+              <div class="range-car-icon">
+                <svg viewBox="0 0 64 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 16 C4 16 8 8 20 7 L28 6 L38 6 C46 6 52 9 56 12 L60 14 L60 16 Q60 18 58 18 L54 18 Q54 22 50 22 Q46 22 46 18 L18 18 Q18 22 14 22 Q10 22 10 18 L4 18 Q2 18 2 16 Z" fill="#D48F38" opacity="0.8"/>
+                  <circle cx="14" cy="18" r="3.5" fill="#1a1a1a" stroke="#D48F38" stroke-width="1"/>
+                  <circle cx="50" cy="18" r="3.5" fill="#1a1a1a" stroke="#D48F38" stroke-width="1"/>
+                  <path d="M22 7 L26 3 L36 3 L40 7" fill="#D48F38" opacity="0.5"/>
+                </svg>
+              </div>
+              <div class="range-dots">
+                <span class="range-dot active-dot"></span>
+                <span class="range-dot"></span>
+                <span class="range-dot"></span>
+                <span class="range-dot"></span>
+                <span class="range-dot"></span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Sun & Time Control -->
+          <div class="panel-glass card-time-control" id="card-time-control">
+            <div class="card-label-row">
+              <span class="text-ui-label label-small">Sun & Time Control</span>
+            </div>
+
+            <div class="dial-container">
+              <svg id="time-dial-svg" viewBox="0 0 160 160">
+                <!-- Dial outer track -->
+                <circle cx="80" cy="80" r="62" class="dial-track" />
+                
+                <!-- Dial ticks group (populated dynamically) -->
+                <g id="dial-ticks"></g>
+                
+                <!-- Center Sun/Moon icons -->
+                <g id="dial-center-icon">
+                  <!-- Sun icon (day) -->
+                  <g id="dial-sun-icon">
+                    <circle cx="80" cy="80" r="14" class="dial-sun-body" />
+                    <!-- Sun rays -->
+                    <g class="dial-sun-rays">
+                      <line x1="80" y1="56" x2="80" y2="50" />
+                      <line x1="80" y1="104" x2="80" y2="110" />
+                      <line x1="56" y1="80" x2="50" y2="80" />
+                      <line x1="104" y1="80" x2="110" y2="80" />
+                      <line x1="63" y1="63" x2="58" y2="58" />
+                      <line x1="97" y1="97" x2="102" y2="102" />
+                      <line x1="63" y1="97" x2="58" y2="102" />
+                      <line x1="97" y1="63" x2="102" y2="58" />
+                    </g>
+                  </g>
+                  <!-- Moon icon (night) -->
+                  <path id="dial-moon-icon" d="M76 68 A 13 13 0 1 0 92 88 A 10.5 10.5 0 1 1 76 68" style="display: none;" />
+                </g>
+                
+                <!-- Interactive knob handle -->
+                <g id="dial-handle" style="cursor: pointer;">
+                  <!-- Knob outer glow ring -->
+                  <circle cx="80" cy="18" r="11" class="dial-knob-glow" />
+                  <!-- Knob outer border -->
+                  <circle cx="80" cy="18" r="9" class="dial-knob" />
+                  <!-- Knob inner dot -->
+                  <circle cx="80" cy="18" r="3.5" class="dial-knob-center" />
+                </g>
+              </svg>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- CENTER SECTION – 3D Canvas + Speedometer -->
+        <section id="center-section">
+          <!-- Speedometer ring (SVG arc) -->
+          <!-- <div id="speedometer-container">
+            <svg id="speedo-svg" viewBox="0 0 420 280" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <filter id="glow-gold">
+                  <feGaussianBlur stdDeviation="3" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+                <filter id="glow-subtle">
+                  <feGaussianBlur stdDeviation="2" result="blur"/>
+                  <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+                </filter>
+              </defs>
+
+              <path d="M 30 220 A 185 185 0 0 1 390 220" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="28" stroke-linecap="round"/>
+              <path id="speedo-progress" d="M 30 220 A 185 185 0 0 1 390 220" fill="none" stroke="url(#arcGrad)" stroke-width="28" stroke-linecap="round" stroke-dasharray="581" stroke-dashoffset="393"/>
+              <path d="M 55 235 A 160 160 0 0 1 365 235" fill="none" stroke="rgba(212,143,56,0.12)" stroke-width="1.5"/>
+              <path d="M 30 220 A 185 185 0 0 1 390 220" fill="none" stroke="rgba(212,143,56,0.18)" stroke-width="2" filter="url(#glow-subtle)"/>
+
+              <defs>
+                <linearGradient id="arcGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#8B5E1A"/>
+                  <stop offset="50%" stop-color="#D48F38"/>
+                  <stop offset="100%" stop-color="#F4C96A"/>
+                </linearGradient>
+              </defs>
+
+              <g id="speedo-ticks" stroke="rgba(255,255,255,0.35)" stroke-width="1.2">
+              </g>
+
+              <g id="speedo-labels" font-family="Orbitron, monospace" fill="rgba(255,255,255,0.7)" font-size="13" text-anchor="middle">
+              </g>
+            </svg>
+
+            <div id="speed-readout">
+              <div id="speed-value" class="text-telemetry-number">78</div>
+              <div id="speed-unit" class="text-ui-label">km/h</div>
+            </div>
+          </div> -->
+
+          <!-- Ground glow underneath car -->
+          <div id="ground-glow"></div>
+        </section>
+
+        <!-- RIGHT COLUMN – Controls -->
+        <section id="right-column">
+
+          <!-- Door / Roof Buttons -->
+          <button class="door-btn" id="btn-door-left">
+            <div class="btn-icon-wrap">
+              <!-- Left door icon -->
+              <svg class="door-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="door-grad-left" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFE0B2" />
+                    <stop offset="100%" stop-color="#D48F38" />
+                  </linearGradient>
+                </defs>
+                <!-- Outer door frame -->
+                <path d="M 6 26 L 6 18 A 2 2 0 0 1 6.6 16.6 L 14.6 8.6 A 2 2 0 0 1 16 8 L 25 8 A 2 2 0 0 1 27 10 L 27 26 A 2 2 0 0 1 25 28 L 8 28 A 2 2 0 0 1 6 26 Z" stroke="url(#door-grad-left)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                <!-- Window/Belt line -->
+                <path d="M 6 18 L 27 18" stroke="url(#door-grad-left)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                <!-- Handle -->
+                <path d="M 9 22 L 13 22" stroke="url(#door-grad-left)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <span class="btn-label">Open Left Door</span>
+          </button>
+
+          <button class="door-btn" id="btn-door-right">
+            <div class="btn-icon-wrap">
+              <!-- Right door icon -->
+              <svg class="door-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="door-grad-right" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFE0B2" />
+                    <stop offset="100%" stop-color="#D48F38" />
+                  </linearGradient>
+                </defs>
+                <!-- Outer door frame (Mirrored) -->
+                <path d="M 26 26 L 26 18 A 2 2 0 0 0 25.4 16.6 L 17.4 8.6 A 2 2 0 0 0 16 8 L 7 8 A 2 2 0 0 0 5 10 L 5 26 A 2 2 0 0 0 7 28 L 24 28 A 2 2 0 0 0 26 26 Z" stroke="url(#door-grad-right)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                <!-- Window/Belt line -->
+                <path d="M 26 18 L 5 18" stroke="url(#door-grad-right)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+                <!-- Handle (Mirrored) -->
+                <path d="M 23 22 L 19 22" stroke="url(#door-grad-right)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <span class="btn-label">Open Right Door</span>
+          </button>
+
+          <button class="door-btn" id="btn-roof">
+            <div class="btn-icon-wrap">
+              <!-- Convertible roof icon -->
+              <svg class="door-icon" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <defs>
+                  <linearGradient id="door-grad-roof" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#FFE0B2" />
+                    <stop offset="100%" stop-color="#D48F38" />
+                  </linearGradient>
+                </defs>
+                <!-- Car base -->
+                <path d="M 4 23 L 28 23" stroke="url(#door-grad-roof)" stroke-width="1.8" stroke-linecap="round" />
+                <!-- Wheels -->
+                <circle cx="9" cy="23" r="2" stroke="url(#door-grad-roof)" stroke-width="1.5" fill="none" />
+                <circle cx="23" cy="23" r="2" stroke="url(#door-grad-roof)" stroke-width="1.5" fill="none" />
+                <!-- Windshield & Rear -->
+                <path d="M 6 23 C 6 20, 8 18, 10 18 L 13 14" stroke="url(#door-grad-roof)" stroke-width="1.8" stroke-linecap="round" />
+                <path d="M 23 18 C 25 18, 26 20, 26 23" stroke="url(#door-grad-roof)" stroke-width="1.8" stroke-linecap="round" />
+                <!-- Dashed Roof line (convertible) -->
+                <path d="M 13 14 C 16 11, 20 11, 23 18" stroke="url(#door-grad-roof)" stroke-width="1.8" stroke-linecap="round" stroke-dasharray="3 2" />
+                <!-- Arrow pointing up/back -->
+                <path d="M 16 14 L 18 10 L 20 14" stroke="url(#door-grad-roof)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" />
+              </svg>
+            </div>
+            <span class="btn-label">Open Roof</span>
+          </button>
+
+          <!-- Bottom Square Buttons -->
+          <div id="right-bottom-btns">
+            <button class="panel-glass sq-btn sq-btn--active" id="btn-map">
+              <div class="sq-btn-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#D48F38" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7z"/>
+                  <circle cx="12" cy="9" r="2.5"/>
+                </svg>
+              </div>
+              <span class="text-ui-label sq-btn-label">Map</span>
+            </button>
+            <button class="panel-glass sq-btn" id="btn-charger">
+              <div class="sq-btn-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="#D48F38" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg">
+                  <rect x="3" y="5" width="14" height="16" rx="2"/>
+                  <path d="M7 5V3M13 5V3"/>
+                  <path d="M17 9h2a2 2 0 0 1 0 4h-2"/>
+                  <path d="M9 12l-1 3h4l-1 3"/>
+                </svg>
+              </div>
+              <span class="text-ui-label sq-btn-label">Charging Station</span>
+            </button>
+          </div>
+
+        </section>
+
+      </main>
+
+      <!-- ───────────────── FOOTER BAR ───────────────── -->
+      <footer id="footer-bar">
+        <div class="footer-left">
+          <div class="footer-icon-group">
+            <svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="3"/><path d="M3 12h3m12 0h3M12 3v3m0 12v3"/><path d="M5.64 5.64l2.12 2.12m8.48 8.48 2.12 2.12M5.64 18.36l2.12-2.12m8.48-8.48 2.12-2.12"/></svg>
+            <span class="footer-icon-label">AUTO</span>
+          </div>
+          <div class="footer-icon-group">
+            <svg class="footer-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 3h14M5 3v3a7 7 0 0 0 14 0V3M12 10v11M8 17l4 4 4-4"/></svg>
+          </div>
+        </div>
+
+        <div class="footer-center">
+          <svg class="leaf-icon" viewBox="0 0 24 24" fill="none" stroke="#D48F38" stroke-width="1.5"><path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10z"/><path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"/></svg>
+          <span class="footer-mode">COMFORT</span>
+        </div>
+
+        <div class="footer-right">
+          <span class="footer-odo">12345 km</span>
+        </div>
+      </footer>
+
+    </div><!-- end #dashboard -->
+  </div><!-- end #app-root -->
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
